@@ -1,110 +1,133 @@
-/------------------------------------------------------------------------/
-/*   FATEC-São Caetano do Sul                 Estrutura de Dados         /
-/                       FelipeSantos Lins                                /
-/                       Giovanni Monteiro                                /
-/             Objetivo: Cadastro de Produtos                             /
-/             Paradigama: programação modular (lista ligada)             /
-/                                                                        /
-/                                                         Data:02/04/2024/
+/-------------------------------------------------------------------------/
+/*   FATEC-São Caetano do Sul                 Estrutura de Dados          /
+/                                                                         /
+/                      Autores:  Felipe Santos Lins                       /
+/                                Giovanni  Monteiro                       /
+/                                                                         /
+/             Objetivo: Controlar Estoque de produtos                     /
+/                                                                         /
+/                                                                         /
+/                                                         Data:06/04/2024 /
 /------------------------------------------------------------------------*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 typedef struct Produto {
+    int id;
     char nome[50];
     int quantidade;
     struct Produto *prox;
 } Produto;
 
-void cadastrarProduto(Produto **lista, char nome[], int quantidade) {
+void cadastrarProduto(Produto **estoque) {
     Produto *novoProduto = (Produto*)malloc(sizeof(Produto));
-    strcpy(novoProduto->nome, nome);
-    novoProduto->quantidade = quantidade;
+    
+    printf("ID: ");
+    scanf("%d", &novoProduto->id);
+    printf("Nome: ");
+    scanf("%s", novoProduto->nome);
+    printf("Quantidade: ");
+    scanf("%d", &novoProduto->quantidade);
     novoProduto->prox = NULL;
- 
-    if (*lista == NULL) {
-        *lista = novoProduto;
+
+    if (*estoque == NULL) {
+        *estoque = novoProduto;
     } else {
-        Produto *temp = *lista;
-        while (temp->prox != NULL) {
-            temp = temp->prox;
+        Produto *aux = *estoque;
+        while (aux->prox != NULL) {
+            aux = aux->prox;
         }
-        temp->prox = novoProduto;
+        aux->prox = novoProduto;
     }
     printf("Produto cadastrado com sucesso.\n");
 }
 
-Produto* buscarProduto(Produto *lista, char nome[]) {
-    Produto *temp = lista;
-    while (temp != NULL) {
-        if (strcmp(temp->nome, nome) == 0) {
-            return temp;
+Produto *buscarProduto(Produto *estoque, int id) {
+    Produto *aux = estoque;
+    while (aux != NULL) {
+        if (aux->id == id) {
+            return aux;
         }
-        temp = temp->prox;
+        aux = aux->prox;
     }
     return NULL;
 }
 
-void baixarEstoque(Produto *produto, int quantidade) {
-    if (produto == NULL) {
-        printf("Produto não encontrado.\n");
-    } else if (produto->quantidade < quantidade) {
-        printf("Quantidade insuficiente em estoque.\n");
+void baixaProduto(Produto *estoque, int id, int quantidade) {
+    Produto *produto = buscarProduto(estoque, id);
+    if (produto != NULL) {
+        if (produto->quantidade >= quantidade) {
+            produto->quantidade -= quantidade;
+            printf("Baixa de %d unidades do produto %s realizada com sucesso.\n", quantidade, produto->nome);
+        } else {
+            printf("Quantidade em estoque insuficiente para a baixa desejada.\n");
+        }
     } else {
-        produto->quantidade -= quantidade;
-        printf("Baixa no estoque realizada com sucesso.\n");
+        printf("Produto com o ID especificado nao encontrado.\n");
     }
 }
- 
+
+void imprimirEstoque(Produto *estoque) {
+    printf("ID\tNome\tQuantidade\n");
+    Produto *aux = estoque;
+    while (aux != NULL) {
+        printf("%d\t%s\t%d\n", aux->id, aux->nome, aux->quantidade);
+        aux = aux->prox;
+    }
+}
+
 int main() {
-    Produto *listaProdutos = NULL;
-    int opcao, quantidade;
-    char nomeProduto[50];
- 
+    Produto *estoque = NULL;
+    int opcao, id, quantidade;
+
     do {
         printf("\nMenu:\n");
         printf("1. Cadastrar Produto\n");
         printf("2. Buscar Produto\n");
-        printf("3. Baixar Estoque\n");
-        printf("4. Sair\n");
+        printf("3. Baixa de Produto\n");
+        printf("4. Imprimir Estoque\n");
+        printf("0. Sair\n");
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
- 
+
         switch (opcao) {
             case 1:
-                printf("Digite o nome do produto: ");
-                scanf("%s", nomeProduto);
-                printf("Digite a quantidade em estoque: ");
-                scanf("%d", &quantidade);
-                cadastrarProduto(&listaProdutos, nomeProduto, quantidade);
+                cadastrarProduto(&estoque);
                 break;
             case 2:
-                printf("Digite o nome do produto: ");
-                scanf("%s", nomeProduto);
-                Produto *produtoBuscado = buscarProduto(listaProdutos, nomeProduto);
-                if (produtoBuscado != NULL) {
-                    printf("Produto encontrado. Quantidade em estoque: %d\n", produtoBuscado->quantidade);
+                printf("Digite o ID do produto a ser buscado: ");
+                scanf("%d", &id);
+                if (buscarProduto(estoque, id) != NULL) {
+                    printf("Produto encontrado.\n");
                 } else {
                     printf("Produto nao encontrado.\n");
                 }
                 break;
-                case 3:
-                printf("Digite o nome do produto: ");
-                scanf("%s", nomeProduto);
-                printf("Digite a quantidade a ser baixada: ");
+            case 3:
+                printf("Digite o ID do produto: ");
+                scanf("%d", &id);
+                printf("Digite a quantidade para baixa: ");
                 scanf("%d", &quantidade);
-                Produto *produtoParaBaixar = buscarProduto(listaProdutos, nomeProduto);
-                baixarEstoque(produtoParaBaixar, quantidade);
+                baixaProduto(estoque, id, quantidade);
                 break;
-                case 4:
-                printf("Saindo do programa...\n");
+            case 4:
+                imprimirEstoque(estoque);
                 break;
-                case 5:
-                printf("Opcao invalida. Tente novamente.\n");
+            case 0:
+                printf("Encerrando o programa.\n");
+                break;
+            default:
+                printf("Opcao invalida.\n");
         }
-    } while (opcao != 4);
- 
+    } while (opcao != 0);
+
+    Produto *temp;
+    while (estoque != NULL) {
+        temp = estoque;
+        estoque = estoque->prox;
+        free(temp);
+    }
+
     return 0;
 }
