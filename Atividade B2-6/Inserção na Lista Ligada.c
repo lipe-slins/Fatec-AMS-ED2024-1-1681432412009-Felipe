@@ -79,7 +79,7 @@ int main() {
     quarto->next = NULL;
 
     int valor = 30;
-    int pos = 2;  // Insere após o segundo nó
+    int pos = 2;  
 
     clock_t inicio = clock();
 
@@ -92,7 +92,6 @@ int main() {
     printLista(head);
     printf("Tempo de execução: %f segundos\n", tempoGasto);
 
-    // Liberar memória alocada
     Node* atual = head;
     Node* prox;
     while (atual != NULL) {

@@ -27,7 +27,7 @@ void inserirNoArray(int arr[], int *size, int valor, int pos) {
 }
 
 int main() {
-    int arr[6] = {10, 25, 40, 80};  // Inicialmente 4 elementos
+    int arr[6] = {10, 25, 40, 80};  
     int size = 4;
     int valor = 30;
     int pos = size / 2;
