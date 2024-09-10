@@ -1,0 +1,14 @@
+a) Busca Linear
+Pior caso: O elemento está no final da lista ou não está presente.
+Função Algébrica: No pior caso, percorremos n elementos.
+Notação Big O: O(n).
+
+b) Busca Linear em Ordem
+Pior caso: O elemento está no final da lista ou é maior que todos os elementos.
+Função Algébrica: Ainda percorremos n elementos no pior caso.
+Notação Big O: O(n).
+
+c) Busca Binária
+Pior caso: O elemento não está presente e a lista é dividida repetidamente.
+Função Algébrica: Cada passo reduz o número de elementos pela metade. Para n elementos, temos log₂(n) passos.
+Notação Big O: O(log n).

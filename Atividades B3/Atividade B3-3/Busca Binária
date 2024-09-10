@@ -1,0 +1,33 @@
+#include <stdio.h>
+
+// Função de Busca Binária
+int buscaBinaria(int arr[], int l, int r, int x) {
+    while (l <= r) {
+        int meio = l + (r - l) / 2;
+
+        if (arr[meio] == x) {
+            return meio;
+        }
+
+        if (arr[meio] < x) {
+            l = meio + 1;
+        } else {
+            r = meio - 1;
+        }
+    }
+    return -1;
+}
+
+int main() {
+    int arr[] = {1, 3, 5, 7, 9};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int x = 5;
+    int resultado = buscaBinaria(arr, 0, n - 1, x);
+
+    if (resultado != -1) {
+        printf("Elemento encontrado no índice %d\n", resultado);
+    } else {
+        printf("Elemento não encontrado.\n");
+    }
+    return 0;
+}
