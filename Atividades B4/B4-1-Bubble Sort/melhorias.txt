@@ -1,0 +1,10 @@
+Melhorias implementadas no Bubble Sort:
+
+1. Otimização com flag de controle:
+   - O algoritmo foi melhorado para evitar iterações desnecessárias quando o array já está ordenado.
+
+2. Alocação dinâmica:
+   - A entrada do usuário define o tamanho do array, usando malloc para garantir flexibilidade.
+
+3. Modularização:
+   - Embora todo o código esteja em um único arquivo, está organizado e comentado, facilitando a manutenção.
